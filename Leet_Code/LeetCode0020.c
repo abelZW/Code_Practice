@@ -9,7 +9,7 @@ static bool isValid(char *s)
 {
     int n = 0,cap = 100;
     char *stack = malloc(cap);
-    stack[n] = '\0';
+    stack[n] = '\0';//初始化都为空
     while (*s != '\0')
     {
         switch(*s)

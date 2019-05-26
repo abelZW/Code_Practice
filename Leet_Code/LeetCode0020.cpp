@@ -92,8 +92,10 @@ int main(int argc, char const *argv[])
     {
         s = argv[1];
     }
+    string result = (isValid(s)?"true":"false");
+    //\""反义字符
     cout << "str == \"" << (s) << "\"" << endl;
-    cout << isValid(s) << endl;
+    cout << result << endl;
     return 0;
 }
 

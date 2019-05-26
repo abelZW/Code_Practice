@@ -35,7 +35,7 @@ qsort 函数的用法规定，“比较函数”的原型应是：int 函数名(
 */
 #include <stdio.h>
 #include <stdlib.h>
-
+//创建结构体
 struct object
 {
     int val;

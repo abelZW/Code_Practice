@@ -24,9 +24,9 @@ C++ push方法与push_back方法：https://www.cnblogs.com/xxyue/p/9051509.html
 
 C++中标准模板库的介绍（STL）：https://blog.csdn.net/laugh12321/article/details/81145439
 */
-#include<iostream>
-#include<vector>
-#include<map>
+#include <iostream>
+#include <vector>
+#include <map>
 using namespace std;
 class Solutinon{
     public:

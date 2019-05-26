@@ -25,6 +25,7 @@
 注意： 每次递归不仅要更新数组起始位置（起始位置之前的元素被抛弃），也要更新k的大小（扣除被抛弃的元素）
 
 */
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -41,11 +42,13 @@ static double find_kth(int a[], int alen,int b[],int blen, int k)
     if(k == 1){
         return a[0]<b[0]?a[0]:b[0];
     }
-    /*将k划分为两部分*/
+    /*将k划分为两部分，代码核心部分*/
     int ia = k/2 < alen ? k/2:alen;
     int ib = k - ia;
+    //通过ia和ib，替换k的值
     if(a[ia-1] < b[ib-1]){
-        return find_kth(a+ia, alen-ia, b, blen, k-ia);
+        
+        return find_kth(a+ia, alen-ia, b, blen, k-ia);//数组加ia之后回传的依旧是从0开始的数组
     }
     else if(a[ia-1] > b[ib-1]){
         return find_kth(a, alen, b+ib, blen-ib, k-ib);
@@ -68,8 +71,8 @@ static double findMedianSortedArrays(int* nums1,int nums1size,int* nums2,int num
 
 int main()
 {
-    int len1[] = {1,2,4,5};
-    int len2[] = {3,3,4,5};
+    int len1[] = {1,2,3};
+    int len2[] = {5,6};
     int size_len1 = sizeof(len1)/sizeof(len1[0]);
     int size_len2 = sizeof(len2)/sizeof(len2[0]);
     double media = findMedianSortedArrays(len1,size_len1,len2,size_len2);
