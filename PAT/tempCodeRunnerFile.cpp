@@ -1,67 +1,63 @@
+/*****************************
+分析：
+１、结构体表示学生的ＩＤ、四门成绩、四门排名、最好的排名所对应学科的下标
+２、排名并列使用１、１、３、４、５，不为１、１、２、３、４　　　测试无法通过
+３、平均分四舍五入，所以需要按照＋０．５后取整，保证四舍五入
+４、存储的时候直接默认ACMＥ的顺序存储数据可简化程序逻辑
+５、用exist数组保存当前ｉｄ是否存在，这个ｉｄ对应结构体的下标为多少。用ｉ＋１可以保证为零的都是不存在的可以直接输出Ｎ/A，
+　　其余不为０的保存的值是对应结构体index+1的值
+ *****************************/
 #include<iostream>
 #include<string>
 #include<vector>
 #include<map>
 #include<algorithm>
 using namespace std;
+struct node{
+    int id,best;
+    int score[4],rank[4];
+}stu[2001];//总的学生数最大为2000
+int exist[1000000],flag = -1;
+bool cmp(node a,node b) {return a.score[flag] > b.score[flag];}
 int main()
 {
-    int n,m,c1,c2;//城市数目，道路数目，出发地，目的地
-    cin>>n>>m>>c1>>c2;
-    int e[n][n],weight[n],dis[n],num[n],w[n];//图，节点权重，距离，道路数目，救援队数目
-    for(int i = 0;i < n; i++)
-    {
-        cin>>weight[i];
+    int n,m,id;
+    scanf("%d %d",&n,&m);
+    for(int i = 0; i < n; i++){
+        scanf("%d %d %d %d",&stu[i].id,&stu[i].score[1],&stu[i].score[2],&stu[i].score[3]);
+        stu[i].score[0] = (stu[i].score[1]+stu[i].score[2]+stu[i].score[3])/3.0 + 0.5;
     }
-    bool visit[n] = {0};//标记是否为已计算过 
-    int flow = 99999999;
-    //开始填充为无穷大
-    fill(e[0],e[0]+n*n,flow);
-    fill(dis,dis+n,flow);
-    int a,b,c;//输入边的权重
-    for(int i=0; i < m; i++)
-    {
-        cin>> a >> b >> c;
-        e[a][b]=e[b][a]=c;
-    }
-    dis[c1] = 0;//开始城市距离为0
-    w[c1] = weight[c1];//开始救援队伍
-    num[c1] = 1;//开始的路径数目
-
-    for(int i=0; i < n; i++)
-    {
-        int u = -1;
-        int min = flow;
-        for(int j = 0; j<n; j++)
-        {
-            if(visit[j]==false && dis[j] < min)//节点没做计算，节点距离更小
-            {
-                u = j;
-                min = dis[j];
-            }
+    for(flag = 0; flag <= 3; flag++){
+        sort(stu,stu+n,cmp);
+        stu[0].rank[flag] = 1;
+        for(int i = 1;i<n;i++){
+            stu[i].rank[flag] = i+1;
+            if(stu[i].score[flag] == stu[i-1].score[flag])
+                stu[i].rank[flag] = stu[i-1].rank[flag];
         }
-        if(u == -1) break;
-        visit[u] = true;
-        for(int v = 0; v < n; v++)
-        {
-            if(visit[v]==false && e[u][v]!=flow)
-            {
-                if(dis[u] + e[u][v] < dis[v])
-                {
-                    dis[v] = dis[u] + e[u][v];
-                    num[v] = num[u];
-                    w[v] = w[u] + weight[v];
-                }else if(dis[u] + e[u][v] == dis[v])
-                {
-                    num[v] = num[v] + num[u];
-                    if(w[u] + weight[v] > w[v])
-                    {
-                        w[v] = w[u] + weight[v];
-                    }
-                }
+    }
+    for(int i = 0;i < n; i++){
+        exist[stu[i].id] = i + 1;
+        stu[i].best = 0;
+        int minn = stu[i].rank[0];
+        for(int j = 1; j <= 3; j++){
+            if(stu[i].rank[j] < minn){
+                minn = stu[i].rank[j];
+                stu[i].best = j;
             }
         }
     }
-    cout << num[c1] << " " <<w[c2];
+    char c[5] = {'A','C','M','E'};
+    for(int i = 0; i < m; i++){
+        scanf("%d",&id);
+        int temp = exist[id];
+        if(temp){
+            int best = stu[temp-1].best;
+            printf("%d %c\n",stu[temp-1].rank[best],c[best]);
+        }else{
+            printf("N/A\n");
+        }
+    }
+    
     return 0;
 }
