@@ -13,7 +13,9 @@
 #include<algorithm>
 #include<cmath>
 #include<cstdio>
+#include<string.h>
 using namespace std;
+
 
 int main()
 {
